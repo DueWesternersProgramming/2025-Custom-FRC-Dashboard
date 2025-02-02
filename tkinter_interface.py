@@ -60,6 +60,19 @@ def create_level_buttons():
     return buttons
 
 
+def create_hp_buttons():
+    """Create Left and Right HP buttons"""
+    buttons = []
+    l = tk.Button(root, text="Left HP", bg="red", fg="black", font=("Courier", 44))
+    r = tk.Button(root, text="Right HP", bg="red", fg="black", font=("Courier", 44))
+
+    l.grid_configure(row=0, column=4, sticky="new")
+    r.grid_configure(row=0, column=5, sticky="new")
+    buttons.append(l)
+    buttons.append(r)
+    return buttons
+
+
 def create_position_buttons():
     names = ["Left", "Coral", "Right"]
     buttons = []
@@ -108,10 +121,21 @@ def position_selected(index):
     nt_interface.setNum("Position", index)  # No +1 since it goes 0,1,2
 
 
-# Create reef buttons initially and set commands
+def hp_selected(index):
+    """Function called when a HP button is clicked."""
+    for i in range(len(hpButtons)):
+        hpButtons[i].config(bg="red")
+    hpButtons[index].config(bg="green")
+
+    nt_interface.setNum("HumanPlayer", index)
+
+
+# Create buttons initially and set commands
+hpButtons = create_hp_buttons()
 reefButtons = create_buttons_in_circle(400, 240, 200)
 positionButtons = create_position_buttons()
 levelButtons = create_level_buttons()
+
 
 for i in range(6):
     reefButtons[i].config(command=lambda i=i: reef_side_selected(i))
@@ -121,6 +145,9 @@ for i in range(3):
 
 for i in range(3):
     positionButtons[i].config(command=lambda i=i: position_selected(i))
+
+for i in range(2):
+    hpButtons[i].config(command=lambda i=i: hp_selected(i))
 
 # Bind the <Configure> event to dynamically update positions
 root.bind("<Configure>", update_positions)

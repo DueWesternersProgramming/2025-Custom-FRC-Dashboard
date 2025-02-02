@@ -7,7 +7,7 @@ NetworkTables.initialize(server="127.0.0.1")
 data = NetworkTables.getTable("SmartDashboard")
 time.sleep(1)  # Time to connect fully
 if data.getNumber("Reef Side", -1) != -1:
-    print("CONNECTED")
+    print("CONNECTED: SIMULATOR")
 else:
     NetworkTables.initialize(
         server="roborio-8575-frc.local"
@@ -17,6 +17,8 @@ else:
     if data.getNumber("Reef Side", -1) == -1:
         print("IMPORTANT: COULD NOT CONNECT/RETRIVE VALUES")
         import error_window
+    else:
+        print("CONNECTED: REAL ROBOT")
 
 
 def getNum(key):
