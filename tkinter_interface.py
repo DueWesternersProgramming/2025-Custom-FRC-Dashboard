@@ -74,7 +74,7 @@ def create_hp_buttons():
 
 
 def create_position_buttons():
-    names = ["Left", "Coral", "Right"]
+    names = ["Left", "Algae", "Right"]
     buttons = []
     for i in range(3):
         button = tk.Button(
