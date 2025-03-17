@@ -22,6 +22,12 @@ jobs:
       with:
         python-version: ${{ matrix.version }}
 
+    - name: Verify Python installation
+      run: |
+        python --version
+        which python
+        python -m pip --version
+
     - name: Install APT Dependencies (Linux)
       run: |
         if [ "$RUNNER_OS" == "Linux" ]; then sudo apt update; sudo apt install libasound2-dev -y; fi
@@ -32,14 +38,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install --upgrade shiv -r requirements.txt
 
-    - name: Build Shiv Zipapp
+    - name: Verify shiv installation
       run: |
-        shiv -c main -o frc_dashboard.pyz -r requirements.txt .
-
-    - name: Upload Zipapp Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: FRC Dashboard ${{ matrix.os }} For Python v${{ matrix.version }}
-        path: |
-          ${{github.workspace}}/frc_dashboard.pyz
-        if-no-files-found: warn
+     
