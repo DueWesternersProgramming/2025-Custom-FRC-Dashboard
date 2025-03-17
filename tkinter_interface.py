@@ -28,7 +28,7 @@ original_image = Image.open(resource_path("img.png"))
 
 # Scale factor (change these values for different sizes)
 scale_factor = 1.25  # Adjust this to make the image larger or smaller
-radius = 220  # Radius of the circle of buttons
+radius = 205  # Radius of the circle of buttons
 
 
 new_width = int(original_image.width * scale_factor)
