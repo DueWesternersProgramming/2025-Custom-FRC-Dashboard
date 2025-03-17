@@ -1,14 +1,10 @@
 name: Build EXE with PyInstaller
 
-<<<<<<< HEAD
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-=======
-on: [push, pull_request]  # Runs on push and PRs, modify as needed
->>>>>>> parent of 21fc11b (swap to shiv actions)
 
 jobs:
   build:
@@ -23,7 +19,6 @@ jobs:
       with:
         python-version: '3.11'  # Change to your Python version
 
-<<<<<<< HEAD
     - name: Verify Python installation
       run: |
         python --version
@@ -36,15 +31,11 @@ jobs:
       shell: bash
 
     - name: Install Dependencies
-=======
-    - name: Install dependencies
->>>>>>> parent of 21fc11b (swap to shiv actions)
       run: |
         python -m pip install --upgrade pip
         pip install pyinstaller
         pip install -r requirements.txt  # If you have dependencies
 
-<<<<<<< HEAD
     - name: Verify shiv installation
       run: |
         pip show shiv
@@ -63,21 +54,11 @@ jobs:
         ls -l  # List files to verify if .pyz file is created
         # Print the directory content to ensure the .pyz file is in the correct path
         ls -l ${GITHUB_WORKSPACE}
-=======
-    - name: Build executable
-      run: |
-        pyinstaller --onefile --windowed main.py --icon=Outlaw-TransparentBackground.ico --add-data "img.png;."
->>>>>>> parent of 21fc11b (swap to shiv actions)
 
     - name: Upload EXE artifact
       uses: actions/upload-artifact@v4
       with:
-<<<<<<< HEAD
         name: FRC Dashboard ${{ matrix.os }} For Python v${{ matrix.version }}
         path: |
           ${{ github.workspace }}/frc_dashboard.pyz
         if-no-files-found: warn
-=======
-        name: REEFSCAPE Operator Dashboard.exe
-        path: dist/main.exe
->>>>>>> parent of 21fc11b (swap to shiv actions)
