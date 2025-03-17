@@ -1,0 +1,32 @@
+name: Build EXE with PyInstaller
+
+on: [push, pull_request]  # Runs on push and PRs, modify as needed
+
+jobs:
+  build:
+    runs-on: windows-latest  # Windows runner to build EXE
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'  # Change to your Python version
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt  # If you have dependencies
+
+    - name: Build executable
+      run: |
+        pyinstaller --onefile --windowed main.py --icon=Outlaw-TransparentBackground.ico
+
+    - name: Upload EXE artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: built-exe
+        path: dist/main.exe
