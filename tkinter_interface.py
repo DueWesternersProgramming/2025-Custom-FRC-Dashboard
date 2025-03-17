@@ -27,8 +27,8 @@ original_image = Image.open(resource_path("img.png"))
 
 
 # Scale factor (change these values for different sizes)
-scale_factor = 1.1  # Adjust this to make the image larger or smaller
-radius = 185  # Radius of the circle of buttons
+scale_factor = 1.15  # Adjust this to make the image larger or smaller
+radius = 215  # Radius of the circle of buttons
 
 
 new_width = int(original_image.width * scale_factor)
@@ -40,7 +40,7 @@ photo = ImageTk.PhotoImage(resized_image)
 
 # Create label with resized image
 picture = tk.Label(root, image=photo, borderwidth=0)
-picture.place(relx=0.5, rely=0.5, anchor="center")
+picture.place(relx=0.5, rely=0.6, anchor="center")
 
 algaePositions = [x for x in range(2, 18, 3)]
 
