@@ -24,8 +24,12 @@ root.geometry("800x480")
 # Load and scale the image
 original_image = Image.open(resource_path("img.png"))
 
+
 # Scale factor (change these values for different sizes)
-scale_factor = 2  # Adjust this to make the image larger or smaller
+scale_factor = 1.6  # Adjust this to make the image larger or smaller
+radius = 275  # Radius of the circle of buttons
+
+
 new_width = int(original_image.width * scale_factor)
 new_height = int(original_image.height * scale_factor)
 
@@ -38,8 +42,6 @@ picture = tk.Label(root, image=photo)
 picture.place(relx=0.5, rely=0.5, anchor="center")
 
 algaePositions = [x for x in range(2, 18, 3)]
-
-radius = 325
 
 
 def create_buttons_in_circle(center_x, center_y, radius, buttons=None):
@@ -70,16 +72,15 @@ def create_buttons_in_circle(center_x, center_y, radius, buttons=None):
 
 
 def create_level_buttons():
-    """Create L1-L3 Buttons"""
     buttons = []
-    for i in range(3):
+    for i in range(3):  # Iterate 0 -> 2 (L1 -> L3)
         button = tk.Button(
             root, text=f"L{i+1}", bg="red", fg="black", font=("Courier", 44)
         )
-        button.grid_configure(column=0, row=i, sticky="nsew")
-        root.rowconfigure(i, weight=1)
+        button.grid(row=2 - i, column=0, sticky="nsw")  # Flip row index
+        root.rowconfigure(2 - i, weight=1)
         buttons.append(button)
-    root.columnconfigure(4, weight=1)
+    root.columnconfigure(0, weight=1)
     return buttons
 
 
