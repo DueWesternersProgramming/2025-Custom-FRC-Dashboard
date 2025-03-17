@@ -20,14 +20,15 @@ def resource_path(relative_path):
 root = tk.Tk()
 root.title("Custom FRC Dashboard")
 root.geometry("800x480")
+root.configure(bg="#3e3e3e")
 
 # Load and scale the image
 original_image = Image.open(resource_path("img.png"))
 
 
 # Scale factor (change these values for different sizes)
-scale_factor = 1.6  # Adjust this to make the image larger or smaller
-radius = 275  # Radius of the circle of buttons
+scale_factor = 1.25  # Adjust this to make the image larger or smaller
+radius = 220  # Radius of the circle of buttons
 
 
 new_width = int(original_image.width * scale_factor)
@@ -38,7 +39,7 @@ resized_image = original_image.resize((new_width, new_height), Image.Resampling.
 photo = ImageTk.PhotoImage(resized_image)
 
 # Create label with resized image
-picture = tk.Label(root, image=photo)
+picture = tk.Label(root, image=photo, borderwidth=0)
 picture.place(relx=0.5, rely=0.5, anchor="center")
 
 algaePositions = [x for x in range(2, 18, 3)]
@@ -63,7 +64,13 @@ def create_buttons_in_circle(center_x, center_y, radius, buttons=None):
             buttons[i].place(x=x, y=y, anchor="center")
         else:  # Create new buttons
             button = tk.Button(
-                root, text=f"{i + 1}", fg="black", width=8, height=4, bg="red"
+                root,
+                text=f"{i + 1}",
+                fg="black",
+                width=4,
+                height=2,
+                bg="red",
+                borderwidth=10,
             )
             button.place(x=x, y=y, anchor="center")
             buttons.append(button)
