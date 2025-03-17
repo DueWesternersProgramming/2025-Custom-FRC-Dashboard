@@ -127,8 +127,6 @@ def reef_side_selected(index):
 
     selection = index + 1
 
-    print(algaePositions)
-
     if selection in algaePositions:
         nt_interface.setNum("Position", 1)
         match selection:
