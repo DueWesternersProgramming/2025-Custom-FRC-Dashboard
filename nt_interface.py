@@ -9,9 +9,7 @@ time.sleep(1)  # Time to connect fully
 if data.getNumber("Reef Side", -1) != -1:
     print("CONNECTED: SIMULATOR")
 else:
-    NetworkTables.initialize(
-        server="roborio-8575-frc.local"
-    )  # Replace TEAM with your team number
+    NetworkTables.initialize(server="roborio-8575-frc.local")
     data = NetworkTables.getTable("SmartDashboard")
     time.sleep(1)  # Time to connect fully
     if data.getNumber("Reef Side", -1) == -1:
@@ -22,10 +20,13 @@ else:
 
 
 def getNum(key):
-
-    return data.getNumber(key, 1.0)
+    return data.getNumber(key, -1.0)
 
 
 def setNum(key, value):
-    print(data.putNumber(key, value))
+    # print(data.putNumber(key, value))
     data.putNumber(key, value)
+
+
+def setBoolean(key, value):
+    data.putBoolean(key, value)
