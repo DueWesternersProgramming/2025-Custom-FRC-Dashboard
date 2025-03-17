@@ -40,4 +40,27 @@ jobs:
 
     - name: Verify shiv installation
       run: |
-     
+        pip show shiv
+        # Check if shiv is installed properly
+        if ! command -v shiv &> /dev/null
+        then
+          echo "shiv could not be found"
+          exit 1
+        else
+          echo "shiv is installed"
+        fi
+
+    - name: Build Shiv Zipapp
+      run: |
+        shiv -c main -o frc_dashboard.pyz -r requirements.txt .
+        ls -l  # List files to verify if .pyz file is created
+        # Print the directory content to ensure the .pyz file is in the correct path
+        ls -l ${GITHUB_WORKSPACE}
+
+    - name: Upload Zipapp Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: FRC Dashboard ${{ matrix.os }} For Python v${{ matrix.version }}
+        path: |
+          ${{ github.workspace }}/frc_dashboard.pyz
+        if-no-files-found: warn
