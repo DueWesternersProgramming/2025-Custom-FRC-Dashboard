@@ -1,4 +1,4 @@
-name: Build EXE with PyInstaller
+name: Build + Upload Executable Dashboard
 
 on:
   push:
@@ -34,18 +34,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
-    - name: Verify shiv installation
-      run: |
-        pip show shiv
-        # Check if shiv is installed properly
-        if ! command -v shiv &> /dev/null
-        then
-          echo "shiv could not be found"
-          exit 1
-        else
-          echo "shiv is installed"
-        fi
 
     - name: Build Shiv Zipapp
       run: |
