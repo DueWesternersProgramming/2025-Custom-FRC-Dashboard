@@ -30,6 +30,7 @@ original_image = Image.open(resource_path("img.png"))
 scale_factor = 1.15  # Adjust this to make the image larger or smaller
 radius = 215  # Radius of the circle of buttons
 
+algaeOffColor = "#7a120b"
 
 new_width = int(original_image.width * scale_factor)
 new_height = int(original_image.height * scale_factor)
@@ -40,9 +41,11 @@ photo = ImageTk.PhotoImage(resized_image)
 
 # Create label with resized image
 picture = tk.Label(root, image=photo, borderwidth=0)
-picture.place(relx=0.5, rely=0.6, anchor="center")
+picture.place(relx=0.6, rely=0.6, anchor="center")
 
+leftPositions = [x for x in range(1, 18, 3)]
 algaePositions = [x for x in range(2, 18, 3)]
+rightPositions = [x for x in range(3, 18, 3)]
 
 
 def create_buttons_in_circle(center_x, center_y, radius, buttons=None):
@@ -63,14 +66,27 @@ def create_buttons_in_circle(center_x, center_y, radius, buttons=None):
         if i < len(buttons):  # Update existing buttons
             buttons[i].place(x=x, y=y, anchor="center")
         else:  # Create new buttons
+            if i + 1 in leftPositions:
+                text = "1"
+                width = 2
+                color = "red"
+            elif i + 1 in algaePositions:
+                text = "A"
+                width = 4
+                color = algaeOffColor
+            else:
+                text = "2"
+                width = 2
+                color = "red"
             button = tk.Button(
                 root,
-                text=f"{i + 1}",
+                text=text,
+                font=("Courier", 15),
                 fg="black",
-                width=4,
+                width=width,
                 height=2,
-                bg="red",
-                borderwidth=10,
+                bg=color,
+                borderwidth=1,
             )
             button.place(x=x, y=y, anchor="center")
             buttons.append(button)
@@ -80,14 +96,17 @@ def create_buttons_in_circle(center_x, center_y, radius, buttons=None):
 
 def create_level_buttons():
     buttons = []
-    for i in range(3):  # Iterate 0 -> 2 (L1 -> L3)
+    names = ["L3", "L2", "L1", "Home"]
+
+    for i in range(3, -1, -1):  # 0 = Home, 1 = L1, 2 = L2, 3 = L3
         button = tk.Button(
-            root, text=f"L{i+1}", bg="red", fg="black", font=("Courier", 44)
+            root, text=names[i], bg="red", fg="black", font=("Courier", 44)
         )
-        button.grid(row=2 - i, column=0, sticky="nsw")  # Flip row index
-        root.rowconfigure(2 - i, weight=1)
+        button.grid(row=i, column=0, sticky="nsw")  # Adjusted row placement
+        root.rowconfigure(i, weight=1)  # Make each row expand equally
         buttons.append(button)
-    root.columnconfigure(0, weight=1)
+
+    root.columnconfigure(0, weight=1)  # Ensure the column expands correctly
     return buttons
 
 
@@ -104,17 +123,17 @@ def create_hp_buttons():
     return buttons
 
 
-def create_position_buttons():
-    names = ["Left", "Algae", "Right"]
-    buttons = []
-    for i in range(3):
-        button = tk.Button(
-            root, text=names[i], bg="red", fg="black", font=("Courier", 30)
-        )
-        button.grid_configure(column=i + 3, row=3, sticky="nsew")
-        root.columnconfigure(i + 3, weight=1)
-        buttons.append(button)
-    return buttons
+# def create_position_buttons():
+#     names = ["Left", "Algae", "Right"]
+#     buttons = []
+#     for i in range(3):
+#         button = tk.Button(
+#             root, text=names[i], bg="red", fg="black", font=("Courier", 30)
+#         )
+#         button.grid_configure(column=i + 3, row=3, sticky="nsew")
+#         root.columnconfigure(i + 3, weight=1)
+#         buttons.append(button)
+#     return buttons
 
 
 def update_positions(event):
@@ -128,44 +147,35 @@ def update_positions(event):
 
 def reef_side_selected(index):
     """Function called when a reef button is clicked."""
-    for i in range(len(reefButtons)):
-        reefButtons[i].config(bg="red")
-    reefButtons[index].config(bg="green")
+    selection = index + 1  # Convert 0-based index to 1-based position
 
-    selection = index + 1
+    # Reset colors except selected one
+    for i, button in enumerate(reefButtons):
+        if i == index:
+            continue  # Skip the selected one
+        if (i + 1) in algaePositions:
+            button.config(bg=algaeOffColor)
+        else:
+            button.config(bg="red")
+
+    # Change selected button to green
+    reefButtons[index].config(bg="green")
 
     if selection in algaePositions:
         nt_interface.setNum("Position", 1)
-        match selection:
-            case 2:
-                nt_interface.setNum("Reef Side", 1)
-                level_selected(2)  # L3, but we pass in 1 to the function
-            case 5:
-                nt_interface.setNum("Reef Side", 2)
-                level_selected(1)  # L2, but we pass in 1 to the function
-            case 8:
-                nt_interface.setNum("Reef Side", 3)
-                level_selected(2)  # L3, but we pass in 1 to the function
-            case 11:
-                nt_interface.setNum("Reef Side", 4)
-                level_selected(1)  # L2, but we pass in 1 to the function
-            case 14:
-                nt_interface.setNum("Reef Side", 5)
-                level_selected(2)  # L3, but we pass in 1 to the function
-            case 17:
-                nt_interface.setNum("Reef Side", 6)
-                level_selected(1)  # L2, but we pass in 1 to the function
+        algae_index = algaePositions.index(selection) + 1  # Get Algae index 1-6
+        nt_interface.setNum("Reef Side", algae_index)
+        level_selected(2 if algae_index % 2 == 1 else 1)  # Alternate L3, L2
     else:
-        for i in algaePositions:
-            if (i - 1) == selection:
-                nt_interface.setNum("Position", 0)
-            elif (i + 1) == selection:
-                nt_interface.setNum("Position", 2)
+        if selection in leftPositions:
+            nt_interface.setNum("Position", 0)
+        elif selection in rightPositions:
+            nt_interface.setNum("Position", 2)
 
 
 def level_selected(index):
     """Function called when a level button is clicked."""
-    for i in range(len(levelButtons)):
+    for i in range(3, -1, -1):
         levelButtons[i].config(bg="red")
     levelButtons[index].config(bg="green")
 
@@ -192,7 +202,7 @@ def hp_selected(index):
 
 # Create buttons initially and set commands
 hpButtons = create_hp_buttons()
-reefButtons = create_buttons_in_circle(400, 240, radius)
+reefButtons = create_buttons_in_circle(450, 240, radius)
 # positionButtons = create_position_buttons()
 levelButtons = create_level_buttons()
 
@@ -200,7 +210,7 @@ levelButtons = create_level_buttons()
 for i in range(18):
     reefButtons[i].config(command=lambda i=i: reef_side_selected(i))
 
-for i in range(3):
+for i in range(1, 4):
     levelButtons[i].config(command=lambda i=i: level_selected(i))
 
 # for i in range(3):
@@ -211,11 +221,11 @@ for i in range(2):
 
 # Make the Home Elevator Button
 
-homeButton = tk.Button(
-    root, text="Home Elevator", bg="red", fg="black", font=("Courier", 30)
+levelButtons[0].config(
+    command=lambda: nt_interface.setBoolean(
+        "HomeSubsystems", (not nt_interface.getBoolean("HomeSubsystems"))
+    )
 )
-homeButton.grid_configure(column=5, row=3, sticky="nsew")
-homeButton.config(command=lambda: nt_interface.setBoolean("HomeSubsystems", True))
 
 
 # Bind the <Configure> event to dynamically update positions
