@@ -33,8 +33,7 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install -r requirements.txt  # If you have dependencies
+        pip install -r requirements.txt
 
     - name: Verify shiv installation
       run: |
@@ -50,7 +49,7 @@ jobs:
 
     - name: Build Shiv Zipapp
       run: |
-        shiv -c main -o frc_dashboard.pyz -r requirements.txt .
+        shiv --site-packages dashboard -e main:main -o frc_dashboard.pyzw -r requirements.txt
         ls -l  # List files to verify if .pyz file is created
         # Print the directory content to ensure the .pyz file is in the correct path
         ls -l ${GITHUB_WORKSPACE}
@@ -60,5 +59,5 @@ jobs:
       with:
         name: FRC Dashboard ${{ matrix.os }} For Python v${{ matrix.version }}
         path: |
-          ${{ github.workspace }}/frc_dashboard.pyz
+          ${{ github.workspace }}/frc_dashboard.pyzw
         if-no-files-found: warn
