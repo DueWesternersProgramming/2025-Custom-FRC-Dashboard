@@ -157,7 +157,6 @@ def reef_side_selected(index):
             button.config(bg=algaeOffColor)
         else:
             button.config(bg="red")
-
     # Change selected button to green
     reefButtons[index].config(bg="green")
 
