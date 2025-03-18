@@ -9,7 +9,7 @@ time.sleep(1)  # Time to connect fully
 if data.getNumber("Reef Side", -1) != -1:
     print("CONNECTED: SIMULATOR")
 else:
-    NetworkTables.initialize(server="roborio-8575-frc.local")
+    NetworkTables.initialize(server="10.85.75.2")
     data = NetworkTables.getTable("SmartDashboard")
     time.sleep(1)  # Time to connect fully
     if data.getNumber("Reef Side", -1) == -1:
