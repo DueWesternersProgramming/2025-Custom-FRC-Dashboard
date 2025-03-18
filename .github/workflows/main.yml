@@ -17,7 +17,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'  # Change to your Python version
+        python-version: '3.10.11'  # Change to your Python version
 
     - name: Verify Python installation
       run: |
@@ -38,14 +38,11 @@ jobs:
     - name: Build Shiv Zipapp
       run: |
         shiv --site-packages dashboard -e main:main -o frc_dashboard.pyzw -r requirements.txt
-        ls -l  # List files to verify if .pyz file is created
-        # Print the directory content to ensure the .pyz file is in the correct path
-        ls -l ${GITHUB_WORKSPACE}
 
-    - name: Upload EXE artifact
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: FRC Dashboard windows-latest For Python v3.11
+        name: FRC Dashboard windows-latest For Python v3.10.11
         path: |
           ${{ github.workspace }}/frc_dashboard.pyzw
         if-no-files-found: warn
