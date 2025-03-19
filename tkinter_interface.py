@@ -178,7 +178,7 @@ def level_selected(index):
         levelButtons[i].config(bg="red")
     levelButtons[index].config(bg="green")
 
-    nt_interface.setNum("Level", index + 1)
+    nt_interface.setNum("Level", index)
 
 
 # def position_selected(index):
