@@ -164,7 +164,7 @@ def reef_side_selected(index):
         nt_interface.setNum("Position", 1)
         algae_index = algaePositions.index(selection) + 1  # Get Algae index 1-6
         nt_interface.setNum("Reef Side", algae_index)
-        level_selected(2 if algae_index % 2 == 1 else 1)  # Alternate L3, L2
+        level_selected(3 if algae_index % 2 == 1 else 2)  # Alternate L3, L2
     else:
         if selection in leftPositions:
             nt_interface.setNum("Position", 0)
