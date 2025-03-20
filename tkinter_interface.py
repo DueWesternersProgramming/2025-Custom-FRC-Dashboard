@@ -170,6 +170,7 @@ def reef_side_selected(index):
             nt_interface.setNum("Position", 0)
         elif selection in rightPositions:
             nt_interface.setNum("Position", 2)
+            
         nt_interface.setNum("Reef Side", index)
 
 
