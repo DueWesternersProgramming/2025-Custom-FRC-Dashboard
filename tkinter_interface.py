@@ -43,10 +43,8 @@ photo = ImageTk.PhotoImage(resized_image)
 picture = tk.Label(root, image=photo, borderwidth=0)
 picture.place(relx=0.6, rely=0.6, anchor="center")
 
-leftPositions = [x for x in range(1, 18, 3)]
-algaePositions = [x for x in range(2, 18, 3)]
-rightPositions = [x for x in range(3, 18, 3)]
-
+reefSideKey = [1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6]
+algaePositions = [2,5,8,11,14,17]
 
 def create_buttons_in_circle(center_x, center_y, radius, buttons=None):
     """Function to create buttons in a circle around a center point, with 1 at the bottom"""
@@ -65,12 +63,13 @@ def create_buttons_in_circle(center_x, center_y, radius, buttons=None):
 
         if i < len(buttons):  # Update existing buttons
             buttons[i].place(x=x, y=y, anchor="center")
+
         else:  # Create new buttons
-            if i + 1 in leftPositions:
+            if determinePositionFromButtonNumber(i+1) == 0:
                 text = "1"
                 width = 2
                 color = "red"
-            elif i + 1 in algaePositions:
+            elif determinePositionFromButtonNumber(i+1) == 1:
                 text = "A"
                 width = 4
                 color = algaeOffColor
@@ -144,34 +143,76 @@ def update_positions(event):
     # Update button positions
     create_buttons_in_circle(center_x, center_y, radius, reefButtons)
 
+def getReefSideFromButtonNumber(buttonNumber):
+    return reefSideKey[buttonNumber-1]
 
-def reef_side_selected(index):
+def reef_side_selected(buttonNumber):
     """Function called when a reef button is clicked."""
-    selection = index + 1  # Convert 0-based index to 1-based position
 
-    # Reset colors except selected one
-    for i, button in enumerate(reefButtons):
-        if i == index:
-            continue  # Skip the selected one
-        if (i + 1) in algaePositions:
+    # Reset colors
+    for button in reefButtons:
+        if reefButtons.index(button)+1 in algaePositions:
+            
             button.config(bg=algaeOffColor)
         else:
             button.config(bg="red")
-    # Change selected button to green
-    reefButtons[index].config(bg="green")
 
-    if selection in algaePositions:
+    # Change selected button to green
+    reefButtons[buttonNumber-1].config(bg="green")
+
+    reefSide = getReefSideFromButtonNumber(buttonNumber)
+
+    if buttonNumber in algaePositions:
         nt_interface.setNum("Position", 1)
-        algae_index = algaePositions.index(selection) + 1  # Get Algae index 1-6
-        nt_interface.setNum("Reef Side", algae_index)
-        level_selected(3 if algae_index % 2 == 1 else 2)  # Alternate L3, L2
+        nt_interface.setNum("Reef Side", reefSide)
+
+        level_selected(3 if reefSide % 2 == 1 else 2)  # Alternate L3, L2
+
     else:
-        if selection in leftPositions:
-            nt_interface.setNum("Position", 0)
-        elif selection in rightPositions:
-            nt_interface.setNum("Position", 2)
-        algae_index = algaePositions.index(selection) + 1  # Get Algae index 1-6
-        nt_interface.setNum("Reef Side", algae_index)
+        nt_interface.setNum("Position", determinePositionFromButtonNumber(buttonNumber))
+        print(buttonNumber)
+        print(reefSide)
+        nt_interface.setNum("Reef Side", reefSide)
+
+
+def determinePositionFromButtonNumber(buttonNumber):
+    match buttonNumber:
+        case 1:
+            return 0
+        case 2:
+            return 1
+        case 3:
+            return 2
+        case 4:
+            return 0
+        case 5:
+            return 1
+        case 6:
+            return 2
+        case 7:
+            return 0
+        case 8:
+            return 1
+        case 9:
+            return 2
+        case 10:
+            return 0
+        case 11:
+            return 1
+        case 12:
+            return 2
+        case 13:
+            return 0
+        case 14:
+            return 1
+        case 15:
+            return 2
+        case 16:
+            return 0
+        case 17:
+            return 1
+        case 18:
+            return 2
 
 
 def level_selected(index):
@@ -209,7 +250,7 @@ levelButtons = create_level_buttons()
 
 
 for i in range(18):
-    reefButtons[i].config(command=lambda i=i: reef_side_selected(i))
+    reefButtons[i].config(command=lambda i=i: reef_side_selected(i+1))
 
 for i in range(1, 4):
     levelButtons[i].config(command=lambda i=i: level_selected(i))
