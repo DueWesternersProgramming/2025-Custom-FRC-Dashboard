@@ -1,2 +1,4 @@
 pynetworktables
 Pillow
+shiv
+pyinstaller
