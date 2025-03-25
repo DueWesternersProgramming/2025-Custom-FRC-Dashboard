@@ -30,3 +30,7 @@ def setNum(key, value):
 
 def setBoolean(key, value):
     data.putBoolean(key, value)
+
+
+def getBoolean(key):
+    return data.getBoolean(key, False)
