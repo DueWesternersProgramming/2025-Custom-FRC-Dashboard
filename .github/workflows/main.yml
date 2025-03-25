@@ -37,7 +37,7 @@ jobs:
 
     - name: Build Shiv Zipapp
       run: |
-        shiv --site-packages dashboard -e main:main -o frc_dashboard.pyzw -r requirements.txt
+        shiv --site-packages . -e main:main -o frc_dashboard.pyzw -r requirements.txt --compressed
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
