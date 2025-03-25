@@ -2,7 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from math import cos, sin, radians
 
-import nt_interface
+from dashboard import nt_interface
 
 import os
 import sys
