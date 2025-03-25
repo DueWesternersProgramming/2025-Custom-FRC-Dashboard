@@ -38,7 +38,7 @@ jobs:
     - name: Copy Resources to Dashboard Directory
       run: |
         mkdir -p dashboard/resources
-        cp ../your_image.png dashboard/resources/
+        cp ../img.png dashboard/resources/
       shell: bash
 
     - name: Build Shiv Zipapp
