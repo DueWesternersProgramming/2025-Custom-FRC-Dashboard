@@ -1,7 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 
-from dashboard import nt_interface
+import nt_interface
 
 root = tk.Tk()
 root.title("Custom FRC Dashboard")
