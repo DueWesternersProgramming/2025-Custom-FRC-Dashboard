@@ -116,7 +116,7 @@ def position_selected(index):
 
 positionButtons = create_position_buttons()
 levelButtons = create_level_buttons()
-intakeOuttakeButtons = create_intake_outtake_buttons()
+# intakeOuttakeButtons = create_intake_outtake_buttons()
 
 for i in range(1, 4):
     levelButtons[i].config(command=lambda i=i: level_selected(i))
