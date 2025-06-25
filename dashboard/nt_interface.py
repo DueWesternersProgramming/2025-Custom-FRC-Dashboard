@@ -2,21 +2,35 @@ import sys
 import time
 from networktables import NetworkTables
 
-
-NetworkTables.initialize(server="127.0.0.1")
-data = NetworkTables.getTable("SmartDashboard")
-time.sleep(1)  # Time to connect fully
-if data.getNumber("Reef Side", -1) != -1:
-    print("CONNECTED: SIMULATOR")
+shouldCheckConnection = True
+teamNumber = input("Please enter the team number, or NA for GUI testing only: ")
+ip = "127.0.0.1"
+if teamNumber == "NA":
+    shouldCheckConnection = False
 else:
-    NetworkTables.initialize(server="10.85.75.2")
+    match (len(teamNumber)):
+        case 4:
+            ip = "10." + teamNumber[0:2] + "." + teamNumber[2:4] + ".2"
+            print(ip)
+        case _:
+            print("No support added yet for numbers less than 4 digits, sorry!")
+
+    NetworkTables.initialize(server="127.0.0.1")  # localhost
     data = NetworkTables.getTable("SmartDashboard")
     time.sleep(1)  # Time to connect fully
-    if data.getNumber("Reef Side", -1) == -1:
-        print("IMPORTANT: COULD NOT CONNECT/RETRIVE VALUES")
-        import error_window
+    if data.getNumber("Reef Side", -1) != -1:
+        print("CONNECTED: SIMULATOR")
     else:
-        print("CONNECTED: REAL ROBOT")
+        NetworkTables.initialize(server=ip)
+        data = NetworkTables.getTable("SmartDashboard")
+        time.sleep(1)  # Time to connect fully
+        if data.getNumber("Reef Side", -1) == -1:
+            if shouldCheckConnection:
+                print("IMPORTANT: COULD NOT CONNECT/RETRIVE VALUES")
+                print("Error: Could not connect to robot")
+                import error_window
+        else:
+            print("CONNECTED: REAL ROBOT")
 
 
 def getNum(key):
